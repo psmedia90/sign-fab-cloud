@@ -3,10 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -31,6 +33,14 @@ class UserResource extends Resource
                     ->label('Email')
                     ->email()
                     ->required(),
+                Forms\Components\TextInput::make('password')
+                    ->label('Password')
+                    ->password()
+                        ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                        ->dehydrated(fn ($state) => filled($state))
+                        ->required(fn (Page $livewire) => ($livewire instanceof CreateUser))
+                    ->maxLength(255)
+                    ->autocomplete('new-password'),
                 Forms\Components\Select::make('role')
                     ->label('Role')
                     ->options([
