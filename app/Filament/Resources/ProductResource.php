@@ -6,12 +6,14 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use TomatoPHP\FilamentMediaManager\Form\MediaManagerInput;
 
 class ProductResource extends Resource
 {
@@ -23,9 +25,19 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                //
-            ]);
+                MediaManagerInput::make('image')
+                    ->disk('pubic')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('description')
+                            ->required()
+                            ->maxLength(255),
+                    ]),
+                ]);
     }
+
 
     public static function table(Table $table): Table
     {
